@@ -1,0 +1,5 @@
+/* Set table to 'fixed' (fastest render) layout */
+table
+{
+    table-layout: fixed;
+}
