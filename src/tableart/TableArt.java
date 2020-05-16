@@ -1,4 +1,3 @@
-
 package tableart;
 
 
@@ -6,8 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -52,19 +49,20 @@ public class TableArt {
         
         Long startTime = System.nanoTime();
         //ARG[0] y ARG[1]
-        File [] file ={ new File ("primer nivel\\final\\ejemplo2PEQ10.jpg"),new File ("primer nivel\\final\\ejemplo2PEQ10Area.jpg")};       
+        File [] file ={ new File (args[0]),new File (args[1])};
+        new File(System.getProperty("user.dir")+"\\output").mkdir();
         
         try {
             //quitar en en futuro
             BufferedImage [] jpg = {ImageIO.read(file[0]),ImageIO.read(file[1])};
             int y = (int) jpg[0].getHeight()/4;
             
-            //iniciamos los hilos e intentamos acceder a sus .string
+            //iniciamos los hilos e intentamos acceder a sus string
             
-            Thread thread0 = new hilo(0,2,jpg);
-            Thread thread1 = new hilo(y+1,2,jpg);
-            Thread thread2 = new hilo(y*2+1,2,jpg);
-            Thread thread3 = new hilo(y*3+1,2,jpg);
+            Thread thread0 = new hilo(0,Integer.parseInt(args[2]),jpg);
+            Thread thread1 = new hilo(y+1,Integer.parseInt(args[2]),jpg);
+            Thread thread2 = new hilo(y*2+1,Integer.parseInt(args[2]),jpg);
+            Thread thread3 = new hilo(y*3+1,Integer.parseInt(args[2]),jpg);
             
             thread0.setName("Q1-");
             thread1.setName("Q2-");
@@ -81,18 +79,12 @@ public class TableArt {
             thread2.join();
             thread3.join();
             
-            //se puede crear esto dinamicamente, leyendo solo las keys del hasmap
-            //ARG[2]
-            String js = "<script type=\"text/javascript\">\n" +
-                            "function is1(){alert('1 pulsado')};\n" +
-                            "function is2(){alert('2 pulsado')};\n" +
-                            "function is3(){alert('3 pulsado')};\n" +
-                            "function is4(){alert('4 pulsado')};\n" +
-                            "</script>";            
+            //Files content
+            String js = "<script src='myscript.js'></script>";            
             
             String html ="<!doctype html >\n" +
                             "<html><head>\n" +
-                            "<link rel='stylesheet' type='text/css' href='normalizeNew.css'>" +
+                            "<link rel='stylesheet' type='text/css' href='colors.css'>" +
                             "</head>\n<body>\n"+
                             js+
                             "\n<table id='mytable'>\n";
@@ -110,9 +102,9 @@ public class TableArt {
                 "	height:1px;\n}"+
                 "td{ \n" +
                 "	width:1px;\n}";
-            
-            File output = new File("primer nivel\\final\\indexNew.html");
-            File css = new File("primer nivel\\final\\normalizeNew.css");
+                        
+            File output = new File(System.getProperty("user.dir")+"\\output\\index.html");
+            File css = new File(System.getProperty("user.dir")+"\\output\\colors.css");
             
             FileWriter fw = new FileWriter(output);
             FileWriter cssFw = new FileWriter(css);
@@ -124,10 +116,9 @@ public class TableArt {
             cssFw.close();
             
         } catch (IOException | InterruptedException ex) {
-            Logger.getLogger(TableArt.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
         }
         Long totalTime = System.nanoTime();
-        System.out.println("tardo en total: " + (totalTime-startTime)/1000000);
-    }
-    
+        System.out.println("Archivos creados con exito!! \nTardo en total: " + (totalTime-startTime)/1000000);
+    }    
 }
